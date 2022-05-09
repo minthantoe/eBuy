@@ -1,0 +1,42 @@
+{% extends "search/base.html" %}
+{% block body %}
+{% load crispy_forms_tags %}
+<div class="container ">
+    <form action="" class="TypoSearchForm" method="post">
+        {% csrf_token %}
+        {{ join_form|crispy  }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% if  qs%}
+
+
+<div class="container" style="margin-top: 20px;">
+    <h2>Items With Possible Typos</h2>
+
+    <h3>Returning results for {{keywords}}</h3>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for entry in qs %}
+      <div class="col">
+        <a href="{{entry.viewItemURL }}"> 
+        <div class="card h-100" >
+            <img src="{{ entry.imageURL }}" class="card-img-top" alt="...">
+    
+          <div class="card-body">
+            <h5 class="card-title">{{ entry.title }}</h5>
+            <p class="card-text" style="color:red";>Bids: {{ entry.bidCount }}</p>
+            <p class="card-text" style="color:green">Current Bid: ${{ entry.currentPrice }}</p>
+            <p class="card-text">Current Watchers: {{ entry.watchCount }}</p>
+          </div>
+
+          <div class="card-footer"> End Date: {{ entry.endTime }}</div>
+          <div class="card-footer"> Category: {{ entry.primaryCategoryName }}</div>
+        </div>
+    </a>
+      </div>
+      {% endfor %}
+    </div>
+</div>
+{% endif %}
+{%endblock%}
